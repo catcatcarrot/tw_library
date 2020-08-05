@@ -38,21 +38,24 @@ public class BookUseRecordServiceImpl implements BookUseRecordService {
     /**还书*/
     @Override
     public BookUseRecord updateBookUseRecord(Long recordId) {
-        BookUseRecord userBorrowBookRecord = bookUseRecordRepository.findByRecordId(recordId);
+        BookUseRecord userBorrowBookRecord = bookUseRecordRepository.getOne(recordId);
 
         LocalDateTime bookShouldReturnDate = userBorrowBookRecord.getBookShouldReturnDate();
         LocalDateTime bookActualReturnDate = LocalDateTime.now();
 
         userBorrowBookRecord.setBookActualReturnDate(bookActualReturnDate);
 
-        BigDecimal bookUseFee = userPayFeeOverReturnDate(bookShouldReturnDate,bookActualReturnDate);
+        BigDecimal bookUseFee = userPayFeeOverReturnDate(bookShouldReturnDate, bookActualReturnDate);
         userBorrowBookRecord.setBookUseFee(bookUseFee);
         return bookUseRecordRepository.save(userBorrowBookRecord);
     }
 
-    private static BigDecimal userPayFeeOverReturnDate(LocalDateTime bookShouldReturnDate, LocalDateTime bookActualReturnDate){
+    public static BigDecimal userPayFeeOverReturnDate(LocalDateTime bookShouldReturnDate, LocalDateTime bookActualReturnDate){
         Duration bookDuration = Duration.between(bookShouldReturnDate,bookActualReturnDate);
-        long bookDurationDays = bookDuration.toDays();
+
+        long initialBookDurationDays = bookDuration.toDays();
+        long bookDurationDays = initialBookDurationDays > 0 ? initialBookDurationDays : 0;
+
         return new BigDecimal(bookDurationDays * 0.3);
     }
 
