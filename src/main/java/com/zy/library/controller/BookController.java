@@ -3,6 +3,7 @@ package com.zy.library.controller;
 import com.zy.library.entity.Book;
 import com.zy.library.entity.BookSort;
 import com.zy.library.service.BookService;
+import com.zy.library.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ public class BookController {
     private BookService bookService;
 
     @Autowired
-    private RedisTemplate<String,Object> redisTemplate;
+    private RedisUtil redisUtil;
 
     @GetMapping("/books")
     public List<Book> listBooksByBookName(@RequestParam(required = false) String bookName
@@ -28,7 +29,7 @@ public class BookController {
 
         if (bookName != null) {
             // 热门搜索的书籍
-            redisTemplate.opsForZSet().incrementScore("hotBooks", bookName, 1);
+            redisUtil.incrementScore("hotBooks", bookName, 1);
 
             listBooks = bookService.listBooksByBookName(bookName);
         } else if (bookAuthor != null) {
@@ -47,13 +48,13 @@ public class BookController {
     }
 
     @GetMapping("/book/can_be_borrowed")
-    public Boolean canBeBorrowed(Long bookId){
+    public Boolean canBeBorrowed(@RequestParam Long bookId){
         return bookService.canBeBorrowed(bookId);
     }
 
     @GetMapping("/book/hot_books")
     public Set<Object> getHotBooks(){
-        return redisTemplate.opsForZSet().reverseRange("hotBooks", 0, 2);
+        return redisUtil.reverseRange("hotBooks", 0, 2);
     }
 
     @PostMapping("/book")
@@ -67,7 +68,7 @@ public class BookController {
     }
 
     @DeleteMapping("/book")
-    public void deleteBook(Long bookId){
+    public void deleteBook(@RequestParam Long bookId){
         bookService.deleteBookByBookId(bookId);
     }
 
