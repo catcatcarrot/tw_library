@@ -4,10 +4,7 @@ import com.zy.library.entity.BookUseRecord;
 import com.zy.library.service.BookUseRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -22,19 +19,20 @@ public class BookUseRecordController {
 
     /**用户目前借的未归还的图书*/
     @GetMapping("/user_use_books")
-    public List<Map<String,Object>> listUserBorrowBooks(Long userId){
+    public List<Map<String,Object>> listUserBorrowBooks(@RequestParam Long userId){
         return bookUseRecordService.listUserBorrowBooks(userId);
     }
 
     /**在期间内图书馆收入总和*/
     @GetMapping("/sum_book_use_income")
-    public BigDecimal sumBookUseIncomeDuringDate(LocalDateTime fromDate, LocalDateTime toDate){
+    public BigDecimal sumBookUseIncomeDuringDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fromDate
+            , @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime toDate){
         return bookUseRecordService.sumBookUseIncomeDuringDate(fromDate, toDate);
     }
 
     /**借书*/
     @PostMapping("/user_use_books")
-    public BookUseRecord saveBookUseRecord(Long userId, Long bookId){
+    public BookUseRecord saveBookUseRecord(@RequestParam Long userId, @RequestParam Long bookId){
         return bookUseRecordService.saveBookUseRecord(userId, bookId);
     }
 
