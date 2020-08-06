@@ -61,7 +61,7 @@ class BookUseRecordControllerTest {
 
         Mockito.when(bookUseRecordService.sumBookUseIncomeDuringDate(Mockito.any(LocalDateTime.class), Mockito.any(LocalDateTime.class))).thenReturn(expectedOutput);
 
-        mvc.perform(MockMvcRequestBuilders.get("/sum_book_use_income?fromDate=2020-08-01 00:00:00&toDate=2020-08-06 23:59:59")
+        mvc.perform(MockMvcRequestBuilders.get("/sum_book_use_income?fromDate=2020-08-01T00:00:09&toDate=2020-08-06T23:59:59")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
