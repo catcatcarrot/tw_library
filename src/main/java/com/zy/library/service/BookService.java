@@ -19,12 +19,12 @@ public interface BookService {
 
     List<Book> listAllBooks();
 
-    Book saveBook(Book book, BookSort sort);
+    Book saveBook(Book book);
 
     Book updateBook(Book book);
 
     void deleteBookByBookId(Long bookId);
 
-    Boolean canBeBorrowed(Long bookId);
+    Boolean getBorrowStatus(Long bookId);
 
 }
