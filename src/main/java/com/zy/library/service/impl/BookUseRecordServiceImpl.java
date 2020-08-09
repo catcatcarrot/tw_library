@@ -19,11 +19,13 @@ public class BookUseRecordServiceImpl implements BookUseRecordService {
     private BookUseRecordRepository bookUseRecordRepository;
 
     @Override
-    public List<Map<String,Object>> listUserBorrowBooks(Long userId) {
+    public List<Map<String, Object>> listUserBorrowBooks(Long userId) {
         return bookUseRecordRepository.findUserBorrowBooksByUserId(userId);
     }
 
-    /**借书*/
+    /**
+     * 借书
+     */
     @Override
     public BookUseRecord saveBookUseRecord(Long userId, Long bookId) {
         // 定义借书时间与应还书时间，距离30天
@@ -31,11 +33,13 @@ public class BookUseRecordServiceImpl implements BookUseRecordService {
         LocalDateTime userShouldReturnBookDate = userBorrowBookDate.plusDays(30);
 
         BookUseRecord bookUseRecord = new BookUseRecord(userId, bookId
-                , userBorrowBookDate, userShouldReturnBookDate);
+                , userBorrowBookDate, userShouldReturnBookDate, new BigDecimal(0));
         return bookUseRecordRepository.save(bookUseRecord);
     }
 
-    /**还书*/
+    /**
+     * 还书
+     */
     @Override
     public BookUseRecord updateBookUseRecord(Long recordId) {
         BookUseRecord userBorrowBookRecord = bookUseRecordRepository.getOne(recordId);
@@ -50,18 +54,18 @@ public class BookUseRecordServiceImpl implements BookUseRecordService {
         return bookUseRecordRepository.save(userBorrowBookRecord);
     }
 
-    public static BigDecimal userPayFeeOverReturnDate(LocalDateTime bookShouldReturnDate, LocalDateTime bookActualReturnDate){
-        Duration bookDuration = Duration.between(bookShouldReturnDate,bookActualReturnDate);
+    public static BigDecimal userPayFeeOverReturnDate(LocalDateTime bookShouldReturnDate, LocalDateTime bookActualReturnDate) {
+        Duration bookDuration = Duration.between(bookShouldReturnDate, bookActualReturnDate);
 
-        long initialBookDurationDays = bookDuration.toDays();
-        long bookDurationDays = initialBookDurationDays > 0 ? initialBookDurationDays : 0;
+        long bookDurationDays = bookDuration.toDays();
+        bookDurationDays = bookDurationDays > 0 ? bookDurationDays : 0;
 
         return new BigDecimal(bookDurationDays * 0.3);
     }
 
     @Override
-    public BigDecimal sumBookUseIncomeDuringDate(LocalDateTime fromDate, LocalDateTime toDate) {
-        return bookUseRecordRepository.sumBookUseIncomeDuringDate(fromDate, toDate);
+    public BigDecimal benefitDuringDate(LocalDateTime fromDate, LocalDateTime toDate) {
+        return bookUseRecordRepository.benefitDuringDate(fromDate, toDate);
     }
 
 

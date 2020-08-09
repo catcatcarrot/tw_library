@@ -46,8 +46,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book saveBook(Book book, BookSort sort) {
-        book.setBookSort(sort);
+    public Book saveBook(Book book) {
         return bookRepository.save(book);
     }
 
@@ -64,6 +63,9 @@ public class BookServiceImpl implements BookService {
         if (book.getBookPress() != null) {
             bookBeforeUpdated.setBookPress(book.getBookPress());
         }
+        if (book.getBookSort().getBookSortId() != null) {
+            bookBeforeUpdated.setBookSort(new BookSort(book.getBookSort().getBookSortId()));
+        }
         return bookRepository.save(bookBeforeUpdated);
     }
 
@@ -72,15 +74,13 @@ public class BookServiceImpl implements BookService {
         bookRepository.deleteBookByBookId(bookId);
     }
 
-
     @Override
-    public Boolean canBeBorrowed(Long bookId) {
+    public Boolean getBorrowStatus(Long bookId) {
         Long borrowBookId = bookRepository.isBorrowed(bookId);
         if (borrowBookId == null) {
             return true;
         }
         return false;
     }
-
 
 }

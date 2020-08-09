@@ -19,8 +19,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User saveUser(User user, Role role) {
-        user.setUserRole(role);
+    public User save(User user) {
         return userRepository.save(user);
     }
 
@@ -33,6 +32,9 @@ public class UserServiceImpl implements UserService {
         }
         if (user.getUserPassword() != null) {
             userBeforeUpdated.setUserPassword(user.getUserPassword());
+        }
+        if (user.getUserRole().getRoleId() != null) {
+            userBeforeUpdated.setUserRole(new Role(user.getUserRole().getRoleId()));
         }
 
         return userRepository.save(userBeforeUpdated);
