@@ -38,15 +38,15 @@ class BookUseRecordControllerTest {
 
     @Test
     void listUserBorrowBooks() throws Exception {
-        List<Map<String,Object>> expectedOutput = new ArrayList<>();
-        Map<String,Object> bookRecord = new HashMap<>();
+        List<Map<String, Object>> expectedOutput = new ArrayList<>();
+        Map<String, Object> bookRecord = new HashMap<>();
         bookRecord.put("recordId", 1L);
         bookRecord.put("bookName", "The Little Prince");
         expectedOutput.add(bookRecord);
 
         Mockito.when(bookUseRecordService.listUserBorrowBooks(Mockito.any())).thenReturn(expectedOutput);
 
-        mvc.perform(MockMvcRequestBuilders.get("/user_use_books?userId=1")
+        mvc.perform(MockMvcRequestBuilders.get("/user_borrow_books?userId=1")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -56,12 +56,12 @@ class BookUseRecordControllerTest {
     }
 
     @Test
-    void sumBookUseIncomeDuringDate() throws Exception {
+    void benefitDuringDate() throws Exception {
         BigDecimal expectedOutput = new BigDecimal(100);
 
-        Mockito.when(bookUseRecordService.sumBookUseIncomeDuringDate(Mockito.any(LocalDateTime.class), Mockito.any(LocalDateTime.class))).thenReturn(expectedOutput);
+        Mockito.when(bookUseRecordService.benefitDuringDate(Mockito.any(LocalDateTime.class), Mockito.any(LocalDateTime.class))).thenReturn(expectedOutput);
 
-        mvc.perform(MockMvcRequestBuilders.get("/sum_book_use_income?fromDate=2020-08-01T00:00:09&toDate=2020-08-06T23:59:59")
+        mvc.perform(MockMvcRequestBuilders.get("/benefit?fromDate=2020-08-01T00:00:00&toDate=2020-08-06T23:59:59")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -70,12 +70,11 @@ class BookUseRecordControllerTest {
 
     @Test
     void saveBookUseRecord() throws Exception {
-        BookUseRecord expectedOutput = new BookUseRecord(1L, 1L, LocalDateTime.now(), LocalDateTime.now());
+        BookUseRecord expectedOutput = new BookUseRecord(1L, 1L, LocalDateTime.now(), LocalDateTime.now(), new BigDecimal(0));
 
         Mockito.when(bookUseRecordService.saveBookUseRecord(Mockito.any(), Mockito.any())).thenReturn(expectedOutput);
 
-        mvc.perform(MockMvcRequestBuilders.post("/user_use_books?userId=1&bookId=1"))
-                //.accept(MediaType.APPLICATION_JSON))
+        mvc.perform(MockMvcRequestBuilders.post("/book/{userId}/borrow/{bookId}", 1L, 1L))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.userId").value(expectedOutput.getUserId()))
@@ -89,7 +88,7 @@ class BookUseRecordControllerTest {
 
         Mockito.when(bookUseRecordService.updateBookUseRecord(Mockito.any())).thenReturn(expectedOutput);
 
-        mvc.perform(MockMvcRequestBuilders.put("/user_use_books?recordId=1")
+        mvc.perform(MockMvcRequestBuilders.put("/user_return_book?recordId=1")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
