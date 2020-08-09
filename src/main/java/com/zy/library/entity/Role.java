@@ -5,18 +5,30 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name="library_role")
+@Table(name = "library_role")
 public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="role_id")
+    @Column(name = "role_id")
     Integer roleId;
-    @Column(name="role_name",length = 10)
+    @Column(name = "role_name", length = 10)
     String roleName;
 
-    @OneToMany(mappedBy = "userRole")
-    private Set<User> users = new HashSet<>();
+    public Role() {
+    }
+
+    public Role(Integer roleId) {
+        this.roleId = roleId;
+    }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "roleId=" + roleId +
+                ", roleName='" + roleName + '\'' +
+                '}';
+    }
 
     public Integer getRoleId() {
         return roleId;
@@ -34,11 +46,4 @@ public class Role {
         this.roleName = roleName;
     }
 
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
 }

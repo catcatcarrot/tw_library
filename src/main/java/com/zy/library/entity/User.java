@@ -5,24 +5,44 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 
 @Entity
-@Table(name="library_user")
+@Table(name = "library_user")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="user_id")
+    @Column(name = "user_id")
     private Long userId;
-    @Column(name = "user_number",length = 20)
+    @Column(name = "user_number", length = 20)
     private String userNumber;
-    @Column(name = "user_name",length = 20)
+    @Column(name = "user_name", length = 20)
     private String userName;
-    @Column(name = "user_password",length = 20)
+    @Column(name = "user_password", length = 20)
     private String userPassword;
 
-    @ManyToOne(targetEntity = Role.class)
-    @JoinColumn(name="user_role",referencedColumnName = "role_id")
-    @JsonIgnore
+    @ManyToOne(targetEntity = Role.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_role", referencedColumnName = "role_id")
     private Role userRole;
+
+    public User() {
+    }
+
+    public User(Long userId, String userName, String userPassword, String userNumber) {
+        this.userId = userId;
+        this.userNumber = userNumber;
+        this.userName = userName;
+        this.userPassword = userPassword;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", userNumber='" + userNumber + '\'' +
+                ", userName='" + userName + '\'' +
+                ", userPassword='" + userPassword + '\'' +
+                ", userRole=" + userRole +
+                '}';
+    }
 
     public Long getUserId() {
         return userId;

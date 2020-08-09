@@ -5,24 +5,29 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name="library_book_sort")
+@Table(name = "library_book_sort")
 public class BookSort {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="sort_id")
+    @Column(name = "sort_id")
     private Integer bookSortId;
-    @Column(name="sort_name",length = 10)
+    @Column(name = "sort_name", length = 10)
     private String bookSortName;
-
-    @OneToMany(mappedBy = "bookSort")
-    private Set<Book> books = new HashSet<>();
 
     public BookSort() {
     }
 
     public BookSort(Integer bookSortId) {
         this.bookSortId = bookSortId;
+    }
+
+    @Override
+    public String toString() {
+        return "BookSort{" +
+                "bookSortId=" + bookSortId +
+                ", bookSortName='" + bookSortName + '\'' +
+                '}';
     }
 
     public Integer getBookSortId() {
@@ -41,11 +46,4 @@ public class BookSort {
         this.bookSortName = bookSortName;
     }
 
-    public Set<Book> getBooks() {
-        return books;
-    }
-
-    public void setBooks(Set<Book> books) {
-        this.books = books;
-    }
 }

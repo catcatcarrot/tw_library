@@ -1,38 +1,42 @@
 package com.zy.library.entity;
 
+import org.hibernate.annotations.Proxy;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="library_book_use_record")
+@Table(name = "library_book_use_record")
+@Proxy(lazy = false)
 public class BookUseRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="record_id")
+    @Column(name = "record_id")
     private Long recordId;
-    @Column(name="book_id")
+    @Column(name = "book_id")
     private Long bookId;
-    @Column(name="user_id")
+    @Column(name = "user_id")
     private Long userId;
-    @Column(name="book_borrow_date")
+    @Column(name = "book_borrow_date")
     private LocalDateTime bookBorrowDate;
-    @Column(name="book_should_return_date")
+    @Column(name = "book_should_return_date")
     private LocalDateTime bookShouldReturnDate;
-    @Column(name="book_actual_return_date")
+    @Column(name = "book_actual_return_date")
     private LocalDateTime bookActualReturnDate;
-    @Column(name="book_use_fee",precision = 10,scale = 2)
+    @Column(name = "book_use_fee", precision = 10, scale = 2)
     private BigDecimal bookUseFee;
 
     public BookUseRecord() {
     }
 
-    public BookUseRecord(Long userId, Long bookId, LocalDateTime bookBorrowDate, LocalDateTime bookShouldReturnDate) {
+    public BookUseRecord(Long userId, Long bookId, LocalDateTime bookBorrowDate, LocalDateTime bookShouldReturnDate, BigDecimal bookUseFee) {
         this.userId = userId;
         this.bookId = bookId;
         this.bookBorrowDate = bookBorrowDate;
         this.bookShouldReturnDate = bookShouldReturnDate;
+        this.bookUseFee = bookUseFee;
     }
 
     public Long getRecordId() {

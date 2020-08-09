@@ -5,25 +5,24 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 
 @Entity
-@Table(name="library_book")
+@Table(name = "library_book")
 public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="book_id")
+    @Column(name = "book_id")
     private Long bookId;
-    @Column(name = "book_name",length = 20)
+    @Column(name = "book_name", length = 20)
     private String bookName;
-    @Column(name = "book_author",length = 20)
+    @Column(name = "book_author", length = 20)
     private String bookAuthor;
-    @Column(name = "book_press",length = 20)
+    @Column(name = "book_press", length = 20)
     private String bookPress;
-    @Column(name = "book_number",length = 20)
+    @Column(name = "book_number", length = 20)
     private String bookNumber;
 
     @ManyToOne(targetEntity = BookSort.class)
-    @JoinColumn(name="book_sort",referencedColumnName = "sort_id")
-    @JsonIgnore
+    @JoinColumn(name = "book_sort", referencedColumnName = "sort_id")
     private BookSort bookSort;
 
     public Book() {
@@ -35,6 +34,17 @@ public class Book {
         this.bookAuthor = bookAuthor;
         this.bookPress = bookPress;
         this.bookNumber = bookNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "bookId=" + bookId +
+                ", bookName='" + bookName + '\'' +
+                ", bookAuthor='" + bookAuthor + '\'' +
+                ", bookPress='" + bookPress + '\'' +
+                ", bookNumber='" + bookNumber + '\'' +
+                '}';
     }
 
     public Long getBookId() {
