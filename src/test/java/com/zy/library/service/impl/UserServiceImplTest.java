@@ -38,16 +38,16 @@ class UserServiceImplTest {
     }
 
     @Test
-    void saveUser() {
+    void save() {
         User inputUser = new User(1L, "张三三", "123", "124");
-        Role inputRole = new Role(1);
-        inputUser.setUserRole(inputRole);
+        Role role = new Role(1);
+        inputUser.setUserRole(role);
 
-        User expectedOutput = inputUser;
+        User expectedOutput = new User();
 
         Mockito.when(userRepository.save(inputUser)).thenReturn(expectedOutput);
 
-        assertEquals(expectedOutput, userService.saveUser(inputUser, inputRole));
+        assertEquals(expectedOutput, userService.save(inputUser));
 
     }
 

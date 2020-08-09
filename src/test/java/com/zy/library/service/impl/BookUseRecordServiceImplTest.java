@@ -74,7 +74,7 @@ class BookUseRecordServiceImplTest {
 
         Mockito.when(bookUseRecordRepository.getOne(input)).thenReturn(userBorrowBookRecord);
 
-        Mockito.when(bookUseRecordRepository.save(Mockito.any())).thenReturn(expectedOutput);
+        Mockito.when(bookUseRecordRepository.save(userBorrowBookRecord)).thenReturn(expectedOutput);
 
         assertEquals(expectedOutput, bookUseRecordService.updateBookUseRecord(input));
     }
@@ -91,15 +91,15 @@ class BookUseRecordServiceImplTest {
     }
 
     @Test
-    void sumBookUseIncomeDuringDate() {
+    void benefitDuringDate() {
         LocalDateTime inputFromDate = LocalDateTime.of(2020,8,1,6,30,20);
         LocalDateTime inputToDate = LocalDateTime.of(2020,8,1,6,30,20);
 
         BigDecimal expectedOutput = new BigDecimal(9);
 
-        Mockito.when(bookUseRecordRepository.sumBookUseIncomeDuringDate(inputFromDate,inputToDate))
+        Mockito.when(bookUseRecordRepository.benefitDuringDate(inputFromDate,inputToDate))
                 .thenReturn(expectedOutput);
 
-        assertEquals(expectedOutput, bookUseRecordService.sumBookUseIncomeDuringDate(inputFromDate, inputToDate));
+        assertEquals(expectedOutput, bookUseRecordService.benefitDuringDate(inputFromDate, inputToDate));
     }
 }

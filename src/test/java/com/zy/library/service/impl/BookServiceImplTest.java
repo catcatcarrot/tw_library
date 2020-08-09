@@ -43,25 +43,27 @@ class BookServiceImplTest {
 
         Mockito.when(bookRepository.findByBookName(input)).thenReturn(expectedOutput);
 
-        assertEquals(expectedOutput,bookService.listBooksByBookName(input));
+        assertEquals(expectedOutput, bookService.listBooksByBookName(input));
     }
 
     @Test
     void saveBook() {
         Book inputBook = new Book(1L,"放学后","东野圭吾","西安出版社","AC123");
-        BookSort inputSort = new BookSort(1);
-        inputBook.setBookSort(inputSort);
+        BookSort bookSort = new BookSort(1);
+        inputBook.setBookSort(bookSort);
 
-        Book expectOutput = inputBook;
+        Book expectedOutput = new Book();
 
-        Mockito.when(bookRepository.save(inputBook)).thenReturn(expectOutput);
+        Mockito.when(bookRepository.save(inputBook)).thenReturn(expectedOutput);
 
-        assertEquals(expectOutput, bookService.saveBook(inputBook, inputSort));
+        assertEquals(expectedOutput, bookService.saveBook(inputBook));
     }
 
     @Test
     void updateBook() {
         Book input = new Book(1L,"放学后","东野圭吾","西安出版社","AC123");
+        BookSort bookSort = new BookSort(1);
+        input.setBookSort(bookSort);
 
         Book expectedOutput = new Book(1L,"放学后啊","东野圭吾","西安出版社","AC123");
 
@@ -73,8 +75,6 @@ class BookServiceImplTest {
     }
 
     @Test
-    @Transactional
-    @Rollback
     void deleteBookByBookId() {
         Long input = 1L;
 
@@ -85,13 +85,13 @@ class BookServiceImplTest {
     }
 
     @Test
-    void canBeBorrowed() {
+    void getBorrowStatus() {
         Long input = 1L;
         Boolean expectedOutput = false;
 
         when(bookRepository.isBorrowed(input)).thenReturn(1L);
 
-        assertEquals(expectedOutput, bookService.canBeBorrowed(input));
+        assertEquals(expectedOutput, bookService.getBorrowStatus(input));
 
     }
 }
